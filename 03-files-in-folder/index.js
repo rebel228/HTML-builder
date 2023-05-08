@@ -1,10 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 
-fs.readdir('./03-files-in-folder/secret-folder', (error, files) => {
+fs.readdir(path.join(__dirname, 'secret-folder'), (error, files) => {
   if(error) throw error;
   files.forEach(file => {
-    fs.stat(`./03-files-in-folder/secret-folder/${file}`, (error, stats) => {
+    fs.stat(path.join(__dirname, 'secret-folder', file), (error, stats) => {
       if(error) throw error;
       let message = '';
       if (stats.isFile()) {
