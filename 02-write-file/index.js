@@ -5,7 +5,6 @@ fs.writeFile('./02-write-file/text.txt', '', (error) => {
   if (error) return console.error(error.message);
 });
 
-
 stdout.write('Введите желаемый текст\n');
 stdin.on('data', data => {
   const text = data.toString();
@@ -21,4 +20,5 @@ stdin.on('data', data => {
   });
 });
 
+process.on( "SIGINT", () => process.exit());
 process.on('exit', () => stdout.write('\nПриложение завершило работу'));
