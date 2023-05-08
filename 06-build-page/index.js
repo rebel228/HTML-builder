@@ -6,11 +6,11 @@ const { pipeline } = require('stream');
 fs.mkdir(path.join(__dirname, 'project-dist'), { recursive: true }, err => {
   if (err) throw err;
 });
-fs.unlink(path.join(__dirname, 'project-dist', 'style.css'), error => {
-  if(error) console.log('Creating style for the first time');
+fs.writeFile(path.join(__dirname, 'project-dist', 'style.css'), '', error => {
+  if(error) throw error;
 });
-fs.unlink(path.join(__dirname, 'project-dist', 'index.html'), error => {
-  if(error) console.log('Creating html for the first time');
+fs.writeFile(path.join(__dirname, 'project-dist', 'index.html'), '', error => {
+  if(error) throw error;
 });
 
 

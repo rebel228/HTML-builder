@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const { pipeline } = require('stream');
 
-fs.unlink(path.join(__dirname, 'project-dist', 'bundle.css'), error => {
-  if(error) console.log('Creating bundle for the first time');
+fs.writeFile(path.join(__dirname, 'project-dist', 'bundle.css'), '', error => {
+  if(error) throw error;
 });
 
 fs.readdir(path.join(__dirname, 'styles'), (error, files) => {
