@@ -17,18 +17,18 @@ function copyDir() {
       fs.copyFile(src, dest, error => {
         if(error) throw error;
       });
-    })
+    });
     fs.readdir(path.join(__dirname, 'files-copy'), (error, files) => {
       if(error) throw error;
       files.forEach (file => {
         if (!ogFiles.includes(file)) {
           fs.unlink(path.join(__dirname, 'files-copy', file), error => {
             if(error) throw error;
-          })
+          });
         }
       });
     });
   });
-};
+}
 
 copyDir();

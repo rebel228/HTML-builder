@@ -8,7 +8,7 @@ fs.writeFile('./02-write-file/text.txt', '', (error) => {
 stdout.write('Введите желаемый текст\n');
 stdin.on('data', data => {
   const text = data.toString();
-  if (text.trim() === 'exit') { process.exit() };
+  if (text.trim() === 'exit') { process.exit(); }
 
   fs.readFile('./02-write-file/text.txt', (error, data) => {
     if (error) return console.error(error.message);
@@ -20,5 +20,5 @@ stdin.on('data', data => {
   });
 });
 
-process.on( "SIGINT", () => process.exit());
+process.on( 'SIGINT', () => process.exit());
 process.on('exit', () => stdout.write('\nПриложение завершило работу'));

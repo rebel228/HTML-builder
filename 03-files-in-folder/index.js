@@ -8,9 +8,9 @@ fs.readdir(path.join(__dirname, 'secret-folder'), (error, files) => {
       if(error) throw error;
       let message = '';
       if (stats.isFile()) {
-        message = `${path.parse(file).name} - ${path.parse(file).ext} - ${stats.size}b`
+        message = `${path.parse(file).name} - ${path.parse(file).ext} - ${stats.size}b`;
         console.log(message);
       }
-    })
-  })
+    });
+  });
 });

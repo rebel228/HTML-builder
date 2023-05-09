@@ -16,17 +16,17 @@ fs.writeFile(path.join(__dirname, 'project-dist', 'index.html'), '', error => {
 
 async function updateHtml () {
   let template = '';
-  const files = await readdir(path.join(__dirname, 'components'), (error, files) => {
+  const files = await readdir(path.join(__dirname, 'components'), (error) => {
     if (error) throw error;
-  })
+  });
   function saveToVariable (filePath) {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(filePath, 'utf-8');
       let result = '';
       stream.on('data', chunk => result += chunk);
       stream.on('end', () => resolve(result));
-      stream.on('error', (error) => reject(error))
-    })
+      stream.on('error', (error) => reject(error));
+    });
   }
   async function updateTemplate () {
     for (const file of files) {
@@ -34,7 +34,7 @@ async function updateHtml () {
       let content = '';
       await saveToVariable(path.join(__dirname, 'components', file)).then( res => {
         content = res;
-      })
+      });
       template = template.replace(`{{${name}}}`, content);
     }
   }
@@ -69,10 +69,10 @@ function copyDir(srcPath, destPath) {
             if(error) throw error;
           });
         }
-      })
-    })
+      });
+    });
   });
-};
+}
 
 fs.readdir(path.join(__dirname, 'styles'), (error, files) => {
   if(error) throw error;
@@ -88,10 +88,10 @@ fs.readdir(path.join(__dirname, 'styles'), (error, files) => {
 
         pipeline (input, output, error => {
           if(error) throw error;
-        })
+        });
       }
-    })
-  })
+    });
+  });
 });
 
 updateHtml();

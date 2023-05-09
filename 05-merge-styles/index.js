@@ -20,8 +20,8 @@ fs.readdir(path.join(__dirname, 'styles'), (error, files) => {
 
         pipeline (input, output, error => {
           if(error) throw error;
-        })
+        });
       }
-    })
-  })
+    });
+  });
 });
