@@ -1,18 +1,19 @@
-const { readdir } = require('fs/promises');
+const { readdir, mkdir, writeFile } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
 const { pipeline } = require('stream');
 
-fs.mkdir(path.join(__dirname, 'project-dist'), { recursive: true }, err => {
-  if (err) throw err;
-});
-fs.writeFile(path.join(__dirname, 'project-dist', 'style.css'), '', error => {
-  if(error) throw error;
-});
-fs.writeFile(path.join(__dirname, 'project-dist', 'index.html'), '', error => {
-  if(error) throw error;
-});
-
+async function createDist () {
+  await mkdir(path.join(__dirname, 'project-dist'), { recursive: true }, err => {
+    if (err) throw err;
+  });
+  await writeFile(path.join(__dirname, 'project-dist', 'style.css'), '', error => {
+    if(error) throw error;
+  });
+  await writeFile(path.join(__dirname, 'project-dist', 'index.html'), '', error => {
+    if(error) throw error;
+  });
+}
 
 async function updateHtml () {
   let template = '';
@@ -50,8 +51,8 @@ async function updateHtml () {
   replaceHtmlContent();
 }
 
-function copyDir(srcPath, destPath) {
-  fs.mkdir(destPath, { recursive: true }, err => {
+async function copyDir(srcPath, destPath) {
+  await mkdir(destPath, { recursive: true }, err => {
     if (err) throw err;
   });
 
@@ -74,25 +75,29 @@ function copyDir(srcPath, destPath) {
   });
 }
 
-fs.readdir(path.join(__dirname, 'styles'), (error, files) => {
-  if(error) throw error;
+function updateStyles () {
+  fs.readdir(path.join(__dirname, 'styles'), (error, files) => {
+    if(error) throw error;
 
-  files.forEach(file => {
-    const src = path.join(__dirname, 'styles', file);
-    const dest = path.join(__dirname, 'project-dist', 'style.css');
-    const output = fs.createWriteStream(dest, { flags: 'a' });
-    fs.stat(src, (error, stats) => {
-      if(error) throw error;
-      if (stats.isFile() && path.parse(file).ext === '.css') {
-        const input = fs.createReadStream(src, 'utf-8');
+    files.forEach(file => {
+      const src = path.join(__dirname, 'styles', file);
+      const dest = path.join(__dirname, 'project-dist', 'style.css');
+      const output = fs.createWriteStream(dest, { flags: 'a' });
+      fs.stat(src, (error, stats) => {
+        if(error) throw error;
+        if (stats.isFile() && path.parse(file).ext === '.css') {
+          const input = fs.createReadStream(src, 'utf-8');
 
-        pipeline (input, output, error => {
-          if(error) throw error;
-        });
-      }
+          pipeline (input, output, error => {
+            if(error) throw error;
+          });
+        }
+      });
     });
   });
-});
+}
 
+createDist();
 updateHtml();
 copyDir(path.join(__dirname, 'assets'), path.join(__dirname, 'project-dist', 'assets'));
+updateStyles();
