@@ -1,5 +1,6 @@
 const fs = require('fs');
-const stream = fs.createReadStream('./01-read-file/text.txt', 'utf-8');
+const path = require('path');
+const stream = fs.createReadStream(path.join(__dirname, 'text.txt'), 'utf-8');
 let data = '';
 
 stream.on('data', chunk => data += chunk);
