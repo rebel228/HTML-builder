@@ -1,9 +1,13 @@
 
+const { mkdir, rm } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
 
-function copyDir() {
-  fs.mkdir(path.join(__dirname, 'files-copy'), { recursive: true }, err => {
+async function copyDir() {
+  await rm(path.join(__dirname, 'files-copy'), { recursive: true }), err => {
+    if (err) throw err;
+  };
+  await mkdir(path.join(__dirname, 'files-copy'), { recursive: true }, err => {
     if (err) throw err;
   });
 
@@ -16,16 +20,6 @@ function copyDir() {
       const dest = path.join(__dirname, 'files-copy', file);
       fs.copyFile(src, dest, error => {
         if(error) throw error;
-      });
-    });
-    fs.readdir(path.join(__dirname, 'files-copy'), (error, files) => {
-      if(error) throw error;
-      files.forEach (file => {
-        if (!ogFiles.includes(file)) {
-          fs.unlink(path.join(__dirname, 'files-copy', file), error => {
-            if(error) throw error;
-          });
-        }
       });
     });
   });
