@@ -8,23 +8,21 @@ async function updateStyles() {
     if(error) throw error;
   });
 
-  fs.readdir(path.join(__dirname, 'styles'), (error, files) => {
+  fs.readdir(path.join(__dirname, 'styles'), { withFileTypes: true }, (error, files) => {
     if(error) throw error;
 
     files.forEach(file => {
-      const src = path.join(__dirname, 'styles', file);
+      const src = path.join(__dirname, 'styles', file.name);
       const dest = path.join(__dirname, 'project-dist', 'bundle.css');
       const output = fs.createWriteStream(dest, { flags: 'a' });
-      fs.stat(src, (error, stats) => {
-        if(error) throw error;
-        if (stats.isFile() && path.parse(file).ext === '.css') {
-          const input = fs.createReadStream(src, 'utf-8');
+      if(error) throw error;
+      if (file.isFile() && path.extname(src) === '.css') {
+        const input = fs.createReadStream(src, 'utf-8');
 
-          pipeline (input, output, error => {
-            if(error) throw error;
-          });
-        }
-      });
+        pipeline (input, output, error => {
+          if(error) throw error;
+        });
+      }
     });
   });
 }
