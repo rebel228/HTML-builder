@@ -2,9 +2,10 @@ const { writeFile } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
 const { pipeline } = require('stream');
+const dest = path.join(__dirname, 'project-dist', 'bundle.css');
 
 async function updateStyles() {
-  await writeFile(path.join(__dirname, 'project-dist', 'bundle.css'), '', error => {
+  await writeFile(dest, '', error => {
     if(error) throw error;
   });
 
@@ -13,7 +14,6 @@ async function updateStyles() {
 
     files.forEach(file => {
       const src = path.join(__dirname, 'styles', file.name);
-      const dest = path.join(__dirname, 'project-dist', 'bundle.css');
       const output = fs.createWriteStream(dest, { flags: 'a' });
       if(error) throw error;
       if (file.isFile() && path.extname(src) === '.css') {

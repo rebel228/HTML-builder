@@ -2,15 +2,19 @@ const { readdir, mkdir, writeFile } = require('fs/promises');
 const fs = require('fs');
 const path = require('path');
 const { pipeline } = require('stream');
+const dest = path.join(__dirname, 'project-dist');
+const htmlDest = path.join(__dirname, 'project-dist', 'index.html');
+const cssDest = path.join(__dirname, 'project-dist', 'style.css');
+const assetsDest = path.join(__dirname, 'project-dist', 'assets');
 
 async function createDist () {
-  await mkdir(path.join(__dirname, 'project-dist'), { recursive: true }, err => {
+  await mkdir(dest, { recursive: true }, err => {
     if (err) throw err;
   });
-  await writeFile(path.join(__dirname, 'project-dist', 'style.css'), '', error => {
+  await writeFile(cssDest, '', error => {
     if(error) throw error;
   });
-  await writeFile(path.join(__dirname, 'project-dist', 'index.html'), '', error => {
+  await writeFile(htmlDest, '', error => {
     if(error) throw error;
   });
 }
@@ -40,7 +44,7 @@ async function updateHtml () {
     }
   }
   async function replaceHtmlContent () {
-    fs.appendFile(path.join(__dirname, 'project-dist', 'index.html'), template, error => {
+    fs.appendFile(htmlDest, template, error => {
       if (error) throw error;
     });
   }
@@ -81,8 +85,7 @@ function updateStyles () {
 
     files.forEach(file => {
       const src = path.join(__dirname, 'styles', file.name);
-      const dest = path.join(__dirname, 'project-dist', 'style.css');
-      const output = fs.createWriteStream(dest, { flags: 'a' });
+      const output = fs.createWriteStream(cssDest, { flags: 'a' });
       if(error) throw error;
       if (file.isFile() && path.extname(src) === '.css') {
         const input = fs.createReadStream(src, 'utf-8');
@@ -97,5 +100,5 @@ function updateStyles () {
 
 createDist();
 updateHtml();
-copyDir(path.join(__dirname, 'assets'), path.join(__dirname, 'project-dist', 'assets'));
+copyDir(path.join(__dirname, 'assets'), assetsDest);
 updateStyles();
